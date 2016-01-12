@@ -1,40 +1,27 @@
-import wave
-import pyaudio
 import sys
+import os
 
-CHUNK = 1024 
-FORMAT = pyaudio.paInt16 #paInt8
-CHANNELS = 2 
-RATE = 44100 #sample rate
-RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = str(sys.argv[1])
+from MFCC import mfcc
+from MFCC import logfbank
+import scipy.io.wavfile as wav
 
-p = pyaudio.PyAudio()
+from Recording import record_to_file
 
-stream = p.open(format=FORMAT,
-                channels=CHANNELS,
-                rate=RATE,
-                input=True,
-                frames_per_buffer=CHUNK) #buffer
+record_to_file('current.wav')
 
-print("* recording")
+#finished recording
 
-frames = []
+path = '/dictionary'
 
-for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-    data = stream.read(CHUNK)
-    frames.append(data) # 2 bytes(16 bits) per channel
+for filename in os.listdir(os.getcwd()+path):
+  print(filename)
 
-print("* done recording")
+#list all files from dictionary
 
-stream.stop_stream()
-stream.close()
-p.terminate()
+(rate,sig) = wav.read("current.wav")
+mfcc_feat = mfcc(sig,rate)
+fbank_feat = logfbank(sig,rate)
 
-wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
-wf.setnchannels(CHANNELS)
-wf.setsampwidth(p.get_sample_size(FORMAT))
-wf.setframerate(RATE)
-wf.writeframes(b''.join(frames))
-wf.close()
+print (fbank_feat[1:3,:])
+
 
