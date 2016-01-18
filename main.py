@@ -1,27 +1,34 @@
 import sys
 import os
+import pickle
 
 from MFCC import mfcc
-from MFCC import logfbank
 import scipy.io.wavfile as wav
 
 from Recording import record_to_file
 
-record_to_file('current.wav')
+with open('database/dictionary.pkl', 'rb') as input:
+        dictionary = pickle.load(input)
 
-#finished recording
-
-path = '/dictionary'
-
-for filename in os.listdir(os.getcwd()+path):
-  print(filename)
-
-#list all files from dictionary
+record_to_file('current', 1)
 
 (rate,sig) = wav.read("current.wav")
 mfcc_feat = mfcc(sig,rate)
-fbank_feat = logfbank(sig,rate)
 
-print (fbank_feat[1:3,:])
+#finished recording
+scores = {}
+print (len(dictionary))
+for name, hmmModel in dictionary.items():
+	score = hmmModel.score(mfcc_feat)
+	scores[name] = score
+
+predictedlabel, prob = max(scores.items(), key=lambda x:x[1])
+
+print (predictedlabel)
+print (prob)
+#list all files from dictionary
+
+
+
 
 
