@@ -16,16 +16,16 @@ import matplotlib.pyplot as plt
 
 CHUNK = 1024 
 FORMAT = pyaudio.paInt16 #paInt8
-CHANNELS = 2 
+CHANNELS = 1
 RATE = 44100 #sample rate
 RECORD_SECONDS = 3
 
 def normalize(snd_data):
     #pojacaj zvuk
-    MAXIMUM = 16384
+    MAXIMUM = 20384
     times = float(MAXIMUM)/max(abs(i) for i in snd_data)
 
-    r = array('h')
+    r = []
     for i in snd_data:
         r.append(int(i*times))
     return r
@@ -75,8 +75,8 @@ def trim(path, where):
 
     duration = len(sound)    
     trimmed_sound = sound[start_trim:duration-end_trim]
+    trimmed_sound= trimmed_sound.apply_gain(-trimmed_sound.max_dBFS)
     trimmed_sound.export(where, format="wav")
-    
 
 def record():
     p = pyaudio.PyAudio()

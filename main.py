@@ -17,15 +17,17 @@ mfcc_feat = mfcc(sig,rate)
 
 #finished recording
 scores = {}
-print (len(dictionary))
 for name, hmmModel in dictionary.items():
 	score = hmmModel.score(mfcc_feat)
 	scores[name] = score
 
 predictedlabel, prob = max(scores.items(), key=lambda x:x[1])
 
+#for key, value in scores.items() :
+#    print (key, value)
+
 print (predictedlabel)
-print (prob)
+#print (prob)
 #list all files from dictionary
 
 

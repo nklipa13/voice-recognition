@@ -16,11 +16,14 @@ if (len(sys.argv) == 1):
         if not os.path.isdir(path+foldername):
             continue
         trainingData = []
+        allMfcc = []
         for filename in os.listdir(path+foldername):
             (rate,sig) = wav.read(path+foldername+'/'+filename)
             mfcc_feat = mfcc(sig,rate)
             trainingData.append(mfcc_feat)
-        model = hmm.GMMHMM(n_components = len(foldername)*2, n_mix = len(foldername)*2, \
+            allMfcc.append(len(trainingData))
+        comps = len(foldername) * 5
+        model = hmm.GMMHMM(n_components = comps, n_mix = comps, \
                            covariance_type='diag', n_iter = 10)
         model.fit(trainingData) 
         dictionary[foldername] = model
@@ -31,11 +34,14 @@ else:
     foldername = str(sys.argv[1])
     path = "dictionary/" + foldername
     trainingData = []
+    allMfcc = []
     for filename in os.listdir(path):
         (rate,sig) = wav.read(path+'/'+filename)
         mfcc_feat = mfcc(sig,rate)
         trainingData.append(mfcc_feat)
-    model = hmm.GMMHMM(n_components = len(foldername)*2, n_mix = len(foldername)*2, \
+        allMfcc.append(len(trainingData))
+    comps = len(foldername) * 5
+    model = hmm.GMMHMM(n_components = comps, n_mix = comps, \
                        covariance_type='diag', n_iter = 10)
     model.fit(trainingData) 
     dictionary[foldername] = model

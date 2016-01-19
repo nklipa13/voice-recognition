@@ -10,7 +10,7 @@ try:
 except:
   xrange=range
 
-def mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
+def mfcc(signal,samplerate=44100,winlen=0.025,winstep=0.01,numcep=13,
           nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97,ceplifter=22,appendEnergy=True):
     """Compute MFCC features from an audio signal.
     :param signal: the audio signal from which to compute features. Should be an N*1 array
@@ -34,7 +34,7 @@ def mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
     if appendEnergy: feat[:,0] = numpy.log(energy) # replace first cepstral coefficient with log of frame energy
     return feat
 
-def fbank(signal,samplerate=16000,winlen=0.025,winstep=0.01,
+def fbank(signal,samplerate=44100,winlen=0.025,winstep=0.01,
           nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97):
     """Compute Mel-filterbank energy features from an audio signal.
     :param signal: the audio signal from which to compute features. Should be an N*1 array
@@ -62,7 +62,7 @@ def fbank(signal,samplerate=16000,winlen=0.025,winstep=0.01,
     
     return feat,energy
 
-def logfbank(signal,samplerate=16000,winlen=0.025,winstep=0.01,
+def logfbank(signal,samplerate=44100,winlen=0.025,winstep=0.01,
           nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97):
     """Compute log Mel-filterbank energy features from an audio signal.
     :param signal: the audio signal from which to compute features. Should be an N*1 array
@@ -79,7 +79,7 @@ def logfbank(signal,samplerate=16000,winlen=0.025,winstep=0.01,
     feat,energy = fbank(signal,samplerate,winlen,winstep,nfilt,nfft,lowfreq,highfreq,preemph)
     return numpy.log(feat)
 
-def ssc(signal,samplerate=16000,winlen=0.025,winstep=0.01,
+def ssc(signal,samplerate=44100,winlen=0.025,winstep=0.01,
           nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97):
     """Compute Spectral Subband Centroid features from an audio signal.
     :param signal: the audio signal from which to compute features. Should be an N*1 array
